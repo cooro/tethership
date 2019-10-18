@@ -22,6 +22,8 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true
 }
+max_speed = 250
+acceleration = 50
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 8, 0 )
