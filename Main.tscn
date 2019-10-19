@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Label.gd" type="Script" id=3]
+[ext_resource path="res://game-font.tres" type="DynamicFont" id=3]
+[ext_resource path="res://Label.gd" type="Script" id=4]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
@@ -37,9 +38,10 @@ autostart = true
 [node name="Scoreboard" type="Label" parent="."]
 margin_right = 40.0
 margin_bottom = 14.0
+custom_fonts/font = ExtResource( 3 )
 text = "0"
 align = 1
-script = ExtResource( 3 )
+script = ExtResource( 4 )
 [connection signal="near_miss" from="Player" to="." method="_on_Player_near_miss"]
 [connection signal="safe" from="Player" to="." method="_on_Player_safe"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

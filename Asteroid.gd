@@ -6,7 +6,7 @@ var rot_speed
 var scale_range
 
 func _ready():
-	rot_speed = rand_range(0, 5)
+	rot_speed = rand_range(-5, 5)
 	scale_range = rand_range(1, 4)
 	scale = Vector2(scale_range, scale_range)
 

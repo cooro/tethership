@@ -1,7 +1,6 @@
 extends Node2D
 
 var screen_size
-var score = 0
 var intscore = 0
 var scoremult = 1
 
@@ -10,10 +9,12 @@ onready var objects = get_node("Objects")
 
 func _ready():
 	screen_size = get_viewport_rect().size
+	Global.score = 0
+	scoremult = 1
 
 func _process(delta):
-	score = score + (delta * scoremult)
-	intscore = floor(score)
+	Global.score += (delta * scoremult)
+	intscore = floor(Global.score)
 	get_node("Scoreboard").text = str(intscore)
 
 func _on_Timer_timeout():
