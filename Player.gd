@@ -1,5 +1,9 @@
 extends Area2D
 
+signal collision
+signal near_miss
+signal safe
+
 var screen_size  # Size of the game window.
 
 export (int) var max_speed  # maximum speed of the ship
@@ -12,22 +16,25 @@ func _ready():
 	$AnimatedSprite.play()
 
 func _process(delta):
-	var yank = 0
+	var yank = Vector2(0, 0)
 	## Rotation Code
 	if Input.is_action_pressed('click'):
 		var touch_pos = get_global_mouse_position()
-		var old_rotation
-		var ship_to_touch = (touch_pos - position).normalized()
-		var direction = Vector2(cos(rotation - PI/2), sin(rotation - PI/2))
-		if ship_to_touch.dot(direction) > 0:
-			yank = abs(rotation - ship_to_touch.angle() + PI/2)/(2*PI)
-			rotation = ship_to_touch.angle() + PI/2  # keep the ship perpendicular to the mouse
-			#yank = abs(old_rotation - rotation)  # yank is the difference of the old and new angles
-		else:
-			rotation = ship_to_touch.angle() - PI/2  # same, but for the other side
-			#yank = abs(old_rotation - rotation)  # yank is the difference of the old and new angles
+		var ship_to_touch = (touch_pos - position).normalized()  # direction from the ship to the touchpoint
+		var direction = Vector2(cos(rotation), sin(rotation))  # front-back distiction
+		var side_direction = Vector2(cos(rotation - PI/2), sin(rotation - PI/2))  # left-right distinction
+		if ship_to_touch.dot(direction) <= 0:  # only pull if the ship is past the touchpoint
+			if ship_to_touch.dot(side_direction) > 0:
+				rotation = ship_to_touch.angle() + PI/2  # keep the ship perpendicular to the mouse
+			else:
+				rotation = ship_to_touch.angle() - PI/2  # same, but for the other side
+			var new_direction = Vector2(cos(rotation), sin(rotation))
+			yank = direction - new_direction  # this value slows the ship when the change is big
+			if yank.length() < 0.1:
+				yank = Vector2(0, 0)  # if yank is small, make it zero
 	
 	## Acceleration Code
+	speed = speed - (speed * yank.length()/2)
 	speed = speed + acceleration * delta
 	if speed > max_speed:
 		speed = max_speed
@@ -37,3 +44,17 @@ func _process(delta):
 	position += velocity
 	position.x = clamp(position.x, 0, screen_size.x)
 	position.y = clamp(position.y, 0, screen_size.y)
+
+func lose():
+	get_tree().change_scene("Title.tscn")
+
+func _on_Player_area_entered(area):
+	if area.z_index == 2:
+		emit_signal("collision")
+		lose()
+
+func _on_ScoreZoneArea2D_area_entered(area):
+	emit_signal("near_miss")
+
+func _on_ScoreZoneArea2D_area_exited(area):
+	emit_signal("safe")

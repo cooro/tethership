@@ -7,10 +7,15 @@
 radius = 10.8103
 
 [node name="Asteroid" type="Area2D"]
+z_index = 2
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
+[connection signal="area_entered" from="." to="." method="_on_Asteroid_area_entered"]

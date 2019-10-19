@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://sprites/ship-1.png" type="Texture" id=2]
@@ -16,6 +16,10 @@ animations = [ {
 "speed": 2.0
 } ]
 
+[sub_resource type="CapsuleShape2D" id=3]
+radius = 15.08
+height = 41.6041
+
 [node name="Player" type="Area2D"]
 rotation = -1.5708
 script = ExtResource( 1 )
@@ -32,3 +36,13 @@ shape = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 2 )
+
+[node name="ScoreZoneArea2D" type="Area2D" parent="."]
+
+[node name="ScoreZoneCollisionShape2D" type="CollisionShape2D" parent="ScoreZoneArea2D"]
+position = Vector2( 8, 0 )
+rotation = 1.5708
+shape = SubResource( 3 )
+[connection signal="area_entered" from="." to="." method="_on_Player_area_entered"]
+[connection signal="area_entered" from="ScoreZoneArea2D" to="." method="_on_ScoreZoneArea2D_area_entered"]
+[connection signal="area_exited" from="ScoreZoneArea2D" to="." method="_on_ScoreZoneArea2D_area_exited"]
