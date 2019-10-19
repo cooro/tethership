@@ -11,11 +11,14 @@ func _ready():
 	screen_size = get_viewport_rect().size
 	Global.score = 0
 	scoremult = 1
+	
+	get_node("Rope").set_point_position(0, Vector2(-10, -10))
+	get_node("Rope").set_point_position(1, Vector2(-10, -10))
 
 func _process(delta):
-	Global.score += (delta * get_node("Player").speed * scoremult)
+	Global.score += (delta * get_node("Player").speed)
 	intscore = floor(Global.score)
-	get_node("Scoreboard").text = str(intscore)
+	get_node("CenterContainer/Scoreboard").text = str(intscore)
 
 func _on_Timer_timeout():
 	var a = asteroid.instance()
@@ -39,9 +42,3 @@ func _on_Timer_timeout():
 		destination = Vector2(rand_range(0, screen_size.x), 0)
 		a.speed = rand_range(50, 250)
 	a.direction = (destination - a.position).normalized()
-
-func _on_Player_near_miss():
-	scoremult = 5
-
-func _on_Player_safe():
-	scoremult = 1

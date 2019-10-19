@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
-[ext_resource path="res://Player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://game-font.tres" type="DynamicFont" id=3]
-[ext_resource path="res://Label.gd" type="Script" id=4]
+[ext_resource path="res://game-font.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Label.gd" type="Script" id=3]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=4]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
@@ -13,7 +13,29 @@ margin_right = 720.0
 margin_bottom = 1280.0
 color = Color( 0, 0, 0, 1 )
 
-[node name="Player" parent="." instance=ExtResource( 2 )]
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_right = 720.0
+margin_bottom = 240.0
+
+[node name="Scoreboard" type="Label" parent="CenterContainer"]
+margin_left = 345.0
+margin_top = 95.0
+margin_right = 374.0
+margin_bottom = 144.0
+custom_fonts/font = ExtResource( 2 )
+text = "0"
+align = 1
+script = ExtResource( 3 )
+
+[node name="Rope" type="Line2D" parent="."]
+points = PoolVector2Array( 0, 0, 0, 0 )
+width = 8.0
+default_color = Color( 1, 1, 0, 1 )
+texture_mode = 188380736
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Player" parent="." instance=ExtResource( 4 )]
 position = Vector2( 360, 1024 )
 
 [node name="PlayerDeathPlane" type="Area2D" parent="."]
@@ -34,14 +56,4 @@ polygon = PoolVector2Array( -274.129, -171.426, 896.523, -160.738, 916.664, 1440
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true
-
-[node name="Scoreboard" type="Label" parent="."]
-margin_right = 40.0
-margin_bottom = 14.0
-custom_fonts/font = ExtResource( 3 )
-text = "0"
-align = 1
-script = ExtResource( 4 )
-[connection signal="near_miss" from="Player" to="." method="_on_Player_near_miss"]
-[connection signal="safe" from="Player" to="." method="_on_Player_safe"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

@@ -1,8 +1,6 @@
 extends Area2D
 
 signal collision
-signal near_miss
-signal safe
 
 var screen_size  # Size of the game window.
 
@@ -32,6 +30,13 @@ func _process(delta):
 			yank = direction - new_direction  # this value slows the ship when the change is big
 			if yank.length() < 0.1:
 				yank = Vector2(0, 0)  # if yank is small, make it zero
+		
+		## Rope Code
+		get_parent().get_node("Rope").set_point_position(0, position)
+		get_parent().get_node("Rope").set_point_position(1, touch_pos)
+	else:
+		get_parent().get_node("Rope").set_point_position(0, Vector2(-10, -10))
+		get_parent().get_node("Rope").set_point_position(1, Vector2(-10, -10))
 	
 	## Acceleration Code
 	speed = speed - (speed * yank.length()/2)
@@ -52,9 +57,3 @@ func _on_Player_area_entered(area):
 	if area.z_index == 2:
 		emit_signal("collision")
 		lose()
-
-func _on_ScoreZoneArea2D_area_entered(area):
-	emit_signal("near_miss")
-
-func _on_ScoreZoneArea2D_area_exited(area):
-	emit_signal("safe")
