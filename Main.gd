@@ -13,7 +13,7 @@ func _ready():
 	scoremult = 1
 
 func _process(delta):
-	Global.score += (delta * scoremult)
+	Global.score += (delta * get_node("Player").speed * scoremult)
 	intscore = floor(Global.score)
 	get_node("Scoreboard").text = str(intscore)
 
